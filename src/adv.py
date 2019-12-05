@@ -45,7 +45,6 @@ def main():
 # Make a new player object that is currently in the 'outside' room.
     
     warrior = Player('warrior','sword','outside')
-    
 
 # Write a loop that:
 # * Prints the current room name
@@ -60,16 +59,17 @@ def main():
     while True:
         warrior.locate()
         direction = input('press n to go north, s for south, e for east, w for west. press q to quit... ')
+        #need error validation on input
+        if direction == 'q':
+            sys.exit("You have quit the game!")
+            break
         rooms = room[warrior.location].getNextRooms()
         if rooms[direction]:
             warrior.move(rooms[direction])
             print(room[warrior.location].message)
-            print(room[warrior.location].getNextRooms())
+            # print(room[warrior.location].getNextRooms())  #for debugging the game
         else:
             print(f'Cannot move {direction } from {warrior.location}')
 
-        if direction == 'q':
-            sys.exit("You have quit the game!")
-            break
-    
 main()
+
