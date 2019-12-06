@@ -28,10 +28,9 @@ class Room: #{
     def removeItem(self,item):
         # print('item in removeItem', item)
         if item in self.items:
-            removed = filter(lambda i : i != item, self.items)
-            # print('updated items in room', list(removed))
-            self.items = list(removed)
-            print('items left in room: ',self.items)
+            remaining = list(filter(lambda i : i != item, self.items))  
+            self.items = remaining  #problem updating self.items = list(remaining)
+            print(f'items left in {self.place}: ',self.items)
             return self.items
     
     def addItem(self, item):

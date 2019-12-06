@@ -3,10 +3,10 @@ from room import Room
 from player import Player
 
 room = {  #array in format: [north,south,east,west]
-    'outside':  Room("Outside Cave Entrance",{'n':'foyer','s':None,'e':None,'w':None},
+    'outside cave':  Room("Outside Cave Entrance",{'n':'foyer','s':None,'e':None,'w':None},
                      "North of you, the cave mount beckons",['sword','dagger']),
 
-    'foyer':    Room("Foyer", {'n':'overlook', 's':'outside','e': 'narrow', 'w':None}, """Dim light filters in from the south. Dusty
+    'foyer':    Room("Foyer", {'n':'overlook', 's':'outside cave','e': 'narrow', 'w':None}, """Dim light filters in from the south. Dusty
 passages run north and east.""",['scimitar','axe']),
 
     'overlook': Room("Grand Overlook", {'n': None,'s': 'foyer','e' : None,'w' : None}, """A steep cliff appears before you, falling
@@ -26,48 +26,51 @@ def promptPick(player):
     currentRoom = room[player.location]
     roomItems = currentRoom.items
     if len(roomItems):
-        print(f'items in the {player.location}: ')
-        for item in roomItems:
-            print(item)
+        # print(f'items in the {player.location}: ')
+        # for item in roomItems:
+        #     print(item)
         picked = input("enter the item you wish to pick up: ")
         # print('picked', picked)
         if picked in roomItems:
             # print('picked', picked)
             # print(room[player.location])
             currentRoom.removeItem(picked)
+            # updatedRoomItems = currentRoom.removeItem(picked)
+            # print('updated room items: ', updatedRoomItems)
             player.pick(picked)
             # print(f'items now in {player.location}: ', roomItems)
         else: 
             print(f'that item is not in {player.location}')
     else:
-        print('no roomItems remain in the room. Proceed with caution')
+        print(f'no room items remain in the {player.location}. Lighten your load or proceed with caution')
 
 def promptDrop(player):
     currentRoom = room[player.location]
     roomItems = currentRoom.items
-    droppedItem = input(f'{player.name} has {player.bag} in the bag.  enter item to drop: ')
+    droppedItem = input(f'{player.name} has {player.bag}.  Enter item to drop: ')
     if droppedItem in player.bag:
         currentRoom.addItem(droppedItem)
         player.drop(droppedItem)
         # print(f'items now in {player.location}: ', roomItems)
-
+    elif not droppedItem:
+        print(f'{player.name} chose not to drop anything...')
+    else:
+        print(f"{droppedItem} not in {player.name}'s bag")
 
 def createPlayer():
     character = input('Choose your character: warrior, knight, sorcerer, angel, genie: ')
-    player = Player(character, 'outside')
+    player = Player(character, 'outside cave')
     return player
 
 
 
 def main():
     player = createPlayer()
-    # warrior = Player('warrior','outside')
-    # promptPick(player)
-    # promptDrop(player)
 
     while True:
         player.locate()
         print(f"items in {player.name}'s bag:", player.bag)
+        print(f'items in the {player.location}: ', room[player.location].items)
         promptPick(player)
         promptDrop(player)
         direction = input('press n to go north, s for south, e for east, w for west. press q to quit... ')
@@ -75,13 +78,14 @@ def main():
         if direction == 'q':
             sys.exit("You have quit the game!")
             break
-
+            
         rooms = room[player.location].getNextRooms()
-        if rooms[direction]:
+        if direction and rooms[direction]:
             player.move(rooms[direction])
             print(room[player.location].message)
 
-            
+        elif not direction:
+            print(f'{player.name} has decreed to not trodden further.')
         else:
             print(f'Cannot move {direction } from {player.location}')
     
