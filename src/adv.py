@@ -26,7 +26,7 @@ def promptPick(player):
     currentRoom = room[player.location]
     roomItems = currentRoom.items
     if len(roomItems):
-        print(f'roomItems in {player.location}: ')
+        print(f'items in the {player.location}: ')
         for item in roomItems:
             print(item)
         picked = input("enter the item you wish to pick up: ")
@@ -34,8 +34,9 @@ def promptPick(player):
         if picked in roomItems:
             # print('picked', picked)
             # print(room[player.location])
-            room[player.location].removeItem(picked)
+            currentRoom.removeItem(picked)
             player.pick(picked)
+            # print(f'items now in {player.location}: ', roomItems)
         else: 
             print(f'that item is not in {player.location}')
     else:
@@ -46,8 +47,9 @@ def promptDrop(player):
     roomItems = currentRoom.items
     droppedItem = input(f'{player.name} has {player.bag} in the bag.  enter item to drop: ')
     if droppedItem in player.bag:
-        roomItems = currentRoom.addItem(droppedItem)
-        print(f'items now in {player.location}: ', roomItems)
+        currentRoom.addItem(droppedItem)
+        player.drop(droppedItem)
+        # print(f'items now in {player.location}: ', roomItems)
 
 
 def createPlayer():
@@ -58,37 +60,41 @@ def createPlayer():
 
 
 def main():
-
     player = createPlayer()
     # warrior = Player('warrior','outside')
-    promptPick(player)
-    promptDrop(player)
+    # promptPick(player)
+    # promptDrop(player)
 
+    while True:
+        player.locate()
+        print(f"items in {player.name}'s bag:", player.bag)
+        promptPick(player)
+        promptDrop(player)
+        direction = input('press n to go north, s for south, e for east, w for west. press q to quit... ')
+        #need error validation on input
+        if direction == 'q':
+            sys.exit("You have quit the game!")
+            break
 
-    
-    
-    
+        rooms = room[player.location].getNextRooms()
+        if rooms[direction]:
+            player.move(rooms[direction])
+            print(room[player.location].message)
 
-    
-
-
-
-
-
-    # while True:
-    #     warrior.locate()
-    #     direction = input('press n to go north, s for south, e for east, w for west. press q to quit... ')
-    #     #need error validation on input
-    #     if direction == 'q':
-    #         sys.exit("You have quit the game!")
-    #         break
-    #     rooms = room[warrior.location].getNextRooms()
-    #     if rooms[direction]:
-    #         warrior.move(rooms[direction])
-    #         print(room[warrior.location].message)
             
-    #     else:
-    #         print(f'Cannot move {direction } from {warrior.location}')
+        else:
+            print(f'Cannot move {direction } from {player.location}')
+    
+    
+    
+
+    
+
+
+
+
+
+    # 
 
 main()
 

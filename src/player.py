@@ -7,12 +7,13 @@ class Player:
         self.bag = []
     
     def pick(self, item):
-        self.bag.append(item)
+        if item not in self.bag:
+            self.bag.append(item)
         print(f"{self.name} picked up the {item} from {self.location}.  Items in {self.name}'s bag: {self.bag} ")
 
     def drop(self, item):
          removed = filter(lambda i : i != item, self.bag)
-         print('remaining in bag', removed)
+         print('items remaining in bag', list(removed))
          print(f"{self.name} dropped {item} in {self.location}")
     
     def locate(self):

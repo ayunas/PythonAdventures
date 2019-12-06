@@ -31,10 +31,13 @@ class Room: #{
             removed = filter(lambda i : i != item, self.items)
             # print('updated items in room', list(removed))
             self.items = list(removed)
+            print('items left in room: ',self.items)
+            return self.items
     
     def addItem(self, item):
         # print('item in addItem of room', item)
         self.items.append(item)
+        print(f'items now in {self.place}: ',self.items)
         return self.items
 
     def __repr__(self):
