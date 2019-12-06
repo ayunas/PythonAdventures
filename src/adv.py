@@ -21,26 +21,50 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south.""",['treasure chest','lock']),
 }
 
-def main():
 
-    
-    warrior = Player('warrior','outside')
-
-    items = room[warrior.location].getRoomItems()
-    if len(items):
-        for item in items:
+def promptPick(player):
+    currentRoom = room[player.location]
+    roomItems = currentRoom.items
+    if len(roomItems):
+        print(f'roomItems in {player.location}: ')
+        for item in roomItems:
             print(item)
         picked = input("enter the item you wish to pick up: ")
         # print('picked', picked)
-        if picked in items:
-            print('picked', picked)
-            print(room[warrior.location])
-            room[warrior.location].removeItem(picked)
-            warrior.pick(picked)
+        if picked in roomItems:
+            # print('picked', picked)
+            # print(room[player.location])
+            room[player.location].removeItem(picked)
+            player.pick(picked)
         else: 
-            print(f'that item is not in {warrior.location}')
+            print(f'that item is not in {player.location}')
     else:
-        print('no items remain in the room. Proceed with caution')
+        print('no roomItems remain in the room. Proceed with caution')
+
+def promptDrop(player):
+    currentRoom = room[player.location]
+    roomItems = currentRoom.items
+    droppedItem = input(f'{player.name} has {player.bag} in the bag.  enter item to drop: ')
+    if droppedItem in player.bag:
+        roomItems = currentRoom.addItem(droppedItem)
+        print(f'items now in {player.location}: ', roomItems)
+
+
+def createPlayer():
+    character = input('Choose your character: warrior, knight, sorcerer, angel, genie: ')
+    player = Player(character, 'outside')
+    return player
+
+
+
+def main():
+
+    player = createPlayer()
+    # warrior = Player('warrior','outside')
+    promptPick(player)
+    promptDrop(player)
+
+
     
     
     

@@ -31,6 +31,11 @@ class Room: #{
             removed = filter(lambda i : i != item, self.items)
             # print('updated items in room', list(removed))
             self.items = list(removed)
+    
+    def addItem(self, item):
+        # print('item in addItem of room', item)
+        self.items.append(item)
+        return self.items
 
     def __repr__(self):
         return "\n" + str(dict([("place: ", self.place), ("message", self.message), ('nextrooms', self.nextrooms), ('items', self.items) ] )) + "\n"
