@@ -2,7 +2,7 @@ import sys
 from room import Room
 from player import Player
 
-room = {  #array in format: [north,south,east,west]
+room = {
     'outside cave':  Room("Outside Cave Entrance",{'n':'foyer','s':None,'e':None,'w':None},
                      "North of you, the cave mount beckons",['sword','dagger']),
 
@@ -30,15 +30,10 @@ def promptPick(player):
         # for item in roomItems:
         #     print(item)
         picked = input("enter the item you wish to pick up: ")
-        # print('picked', picked)
+     
         if picked in roomItems:
-            # print('picked', picked)
-            # print(room[player.location])
             currentRoom.removeItem(picked)
-            # updatedRoomItems = currentRoom.removeItem(picked)
-            # print('updated room items: ', updatedRoomItems)
             player.pick(picked)
-            # print(f'items now in {player.location}: ', roomItems)
         else: 
             print(f'that item is not in {player.location}')
     else:
@@ -51,7 +46,6 @@ def promptDrop(player):
     if droppedItem in player.bag:
         currentRoom.addItem(droppedItem)
         player.drop(droppedItem)
-        # print(f'items now in {player.location}: ', roomItems)
     elif not droppedItem:
         print(f'{player.name} chose not to drop anything...')
     else:
