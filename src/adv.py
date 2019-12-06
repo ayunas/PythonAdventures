@@ -1,29 +1,73 @@
 import sys
 from room import Room
 from player import Player
-# from pygame import *
-# from pygame.locals import *
-# import pygame
-# Declare all the rooms
 
 room = {  #array in format: [north,south,east,west]
     'outside':  Room("Outside Cave Entrance",{'n':'foyer','s':None,'e':None,'w':None},
-                     "North of you, the cave mount beckons"),
+                     "North of you, the cave mount beckons",['sword','dagger']),
 
     'foyer':    Room("Foyer", {'n':'overlook', 's':'outside','e': 'narrow', 'w':None}, """Dim light filters in from the south. Dusty
-passages run north and east."""),
+passages run north and east.""",['scimitar','axe']),
 
     'overlook': Room("Grand Overlook", {'n': None,'s': 'foyer','e' : None,'w' : None}, """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance, but there is no way across the chasm.""",['chair','blanket']),
 
     'narrow':   Room("Narrow Passage", {'n': 'treasure', 's' : None, 'e' : None, 'w' : 'foyer'}, """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+to north. The smell of gold permeates the air.""",['torch', 'flash-light','lantern']),
 
     'treasure': Room("Treasure Chamber",{'n' : None,'s' : 'narrow', 'e' : None, 'w' : None}, """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+earlier adventurers. The only exit is to the south.""",['treasure chest','lock']),
 }
+
+def main():
+
+    
+    warrior = Player('warrior','outside')
+
+    items = room[warrior.location].getRoomItems()
+    if len(items):
+        for item in items:
+            print(item)
+        picked = input("enter the item you wish to pick up: ")
+        # print('picked', picked)
+        if picked in items:
+            print('picked', picked)
+            print(room[warrior.location])
+            room[warrior.location].removeItem(picked)
+            warrior.pick(picked)
+        else: 
+            print(f'that item is not in {warrior.location}')
+    else:
+        print('no items remain in the room. Proceed with caution')
+    
+    
+    
+
+    
+
+
+
+
+
+    # while True:
+    #     warrior.locate()
+    #     direction = input('press n to go north, s for south, e for east, w for west. press q to quit... ')
+    #     #need error validation on input
+    #     if direction == 'q':
+    #         sys.exit("You have quit the game!")
+    #         break
+    #     rooms = room[warrior.location].getNextRooms()
+    #     if rooms[direction]:
+    #         warrior.move(rooms[direction])
+    #         print(room[warrior.location].message)
+            
+    #     else:
+    #         print(f'Cannot move {direction } from {warrior.location}')
+
+main()
+
 
 
 # Link rooms together
@@ -41,10 +85,7 @@ earlier adventurers. The only exit is to the south."""),
 # Main
 #
 
-def main():
 # Make a new player object that is currently in the 'outside' room.
-    
-    warrior = Player('warrior','sword','outside')
 
 # Write a loop that:
 # * Prints the current room name
@@ -56,20 +97,7 @@ def main():
 #
 # If the user enters "q", quit the game.
 
-    while True:
-        warrior.locate()
-        direction = input('press n to go north, s for south, e for east, w for west. press q to quit... ')
-        #need error validation on input
-        if direction == 'q':
-            sys.exit("You have quit the game!")
-            break
-        rooms = room[warrior.location].getNextRooms()
-        if rooms[direction]:
-            warrior.move(rooms[direction])
-            print(room[warrior.location].message)
-            # print(room[warrior.location].getNextRooms())  #for debugging the game
-        else:
-            print(f'Cannot move {direction } from {warrior.location}')
-
-main()
-
+# from pygame import *
+# from pygame.locals import *
+# import pygame
+# Declare all the rooms
